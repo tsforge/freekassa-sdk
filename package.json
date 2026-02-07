@@ -1,6 +1,6 @@
 {
   "name": "@exact-team/freekassa-sdk",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "freekassa sdk",
   "scripts": {
     "test": "ts-node test.ts",
