@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { STATUS_VALUES } from './constants';
 
 export namespace ListOrdersCommand {
     export const RequestListOrdersSchema = z.object({
@@ -14,7 +15,7 @@ export namespace ListOrdersCommand {
     export type IListOrdersInput = z.input<typeof RequestListOrdersSchema>;
 
     export const ResponseListOrdersSchema = z.object({
-        type: z.enum(['success']),
+        type: z.enum(STATUS_VALUES),
         pages: z.number(),
         orders: z.array(
             z.object({

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { STATUS_VALUES } from './constants';
 
 export namespace ListWithdrawalsCommand {
     export const RequestListWithdrawalsSchema = z.object({
@@ -14,7 +15,7 @@ export namespace ListWithdrawalsCommand {
     export type IListWithdrawalsInput = z.input<typeof RequestListWithdrawalsSchema>;
 
     export const ResponseListWithdrawalsSchema = z.object({
-        type: z.enum(['success', 'error']),
+        type: z.enum(STATUS_VALUES),
         message: z.string().optional(),
         pages: z.number(),
         orders: z.array(

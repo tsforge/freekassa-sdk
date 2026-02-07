@@ -55,20 +55,25 @@ export class Freekassa {
         return res.json() as Promise<T>;
     }
 
-    public signForm(amount: number, paymentId: string): string {
-        const str = `${this.shopId}:${amount}:${this.secretWord1}:${this.currency}:${paymentId}`;
+    public signForm(
+        amount: number,
+        paymentId: string,
+        currency: CtrConfigCommand.ICtrConfig['currency'],
+    ): string {
+        const str = `${this.shopId}:${amount}:${this.secretWord1}:${currency}:${paymentId}`;
         return crypto.createHash('md5').update(str).digest('hex');
     }
 
     // Построение URL для перенаправления на страницу оплаты
     public createPaymentLink(dto: CreatePaymentLinkCommand.ICreatePaymentLink): string {
         const params = CreatePaymentLinkCommand.RequestCreatePaymentLinkSchema.parse(dto);
-        const s = this.signForm(params.amount, params.paymentId);
+        const actualCurrency = params.currency ? params.currency : this.currency;
+        const s = this.signForm(params.amount, params.paymentId, actualCurrency);
 
         const q: Record<string, string> = {
             m: String(this.shopId),
             oa: String(params.amount),
-            currency: this.currency,
+            currency: actualCurrency,
             o: params.paymentId,
             s,
             lang: this.lang,

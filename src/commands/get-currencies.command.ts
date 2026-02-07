@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { CURRENCY_VALUES } from './constants';
 
 export namespace GetCurrenciesCommand {
     export const ResponseGetCurrenciesSchema = z.object({
@@ -7,7 +8,7 @@ export namespace GetCurrenciesCommand {
             z.object({
                 id: z.number(),
                 name: z.string(),
-                currency: z.enum(['RUB', 'USD', 'EUR', 'UAH', 'KZT']),
+                currency: z.enum(CURRENCY_VALUES),
                 is_enabled: z.number(),
                 is_favorite: z.number(),
             }),

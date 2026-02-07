@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { CURRENCY_VALUES, LANG_VALUES } from './constants';
 
 export namespace CtrConfigCommand {
     export const RequestCtrConfigSchema = z.object({
@@ -8,8 +9,8 @@ export namespace CtrConfigCommand {
         shopId: z.number(),
         payUrl: z.string().default('https://pay.fk.money/'),
         apiUrl: z.string().default('https://api.fk.life/v1/'),
-        lang: z.enum(['ru', 'en']),
-        currency: z.enum(['RUB', 'USD', 'EUR', 'UAH', 'KZT']),
+        lang: z.enum(LANG_VALUES),
+        currency: z.enum(CURRENCY_VALUES),
     });
 
     export type ICtrConfig = z.infer<typeof RequestCtrConfigSchema>;

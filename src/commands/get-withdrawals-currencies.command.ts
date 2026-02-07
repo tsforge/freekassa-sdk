@@ -1,8 +1,9 @@
 import { z } from 'zod';
+import { STATUS_VALUES } from './constants';
 
 export namespace GetWithdrawalsCurrenciesCommand {
     export const ResponseGetWithdrawalsCurrenciesSchema = z.object({
-        type: z.enum(['success', 'error']),
+        type: z.enum(STATUS_VALUES),
         message: z.string().optional(),
         currencies: z.array(
             z.object({

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { CtrConfigCommand } from './ctr-config.command';
 
 export namespace CreatePaymentLinkCommand {
     export const RequestCreatePaymentLinkSchema = z.object({
@@ -10,6 +11,7 @@ export namespace CreatePaymentLinkCommand {
         successUrl: z.string().optional(),
         failUrl: z.string().optional(),
         notifyUrl: z.string().optional(),
+        currency: CtrConfigCommand.RequestCtrConfigSchema.shape.currency.optional(),
     });
 
     export type ICreatePaymentLink = z.infer<typeof RequestCreatePaymentLinkSchema>;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CtrConfigCommand } from './ctr-config.command';
+import { STATUS_VALUES } from './constants';
 
 export namespace CreateOrderCommand {
     export const RequestCreateOrderSchema = z.object({
@@ -19,7 +20,7 @@ export namespace CreateOrderCommand {
     export type ICreateOrderInput = z.input<typeof RequestCreateOrderSchema>;
 
     export const ResponseCreateOrderSchema = z.object({
-        type: z.enum(['success', 'error']),
+        type: z.enum(STATUS_VALUES),
         orderId: z.number(),
         orderHash: z.string(),
         location: z.string(),
