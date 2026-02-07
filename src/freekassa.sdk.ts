@@ -155,14 +155,11 @@ export class Freekassa {
             shopId: this.shopId,
             i: dtoParsed.methodId,
             ip: dtoParsed.ip,
+            email: dtoParsed.email,
             amount: dtoParsed.amount,
             currency: dto.currency ? dto.currency : this.currency,
             paymentId: dtoParsed.paymentId,
         };
-
-        if (dto.email) {
-            body.email = dtoParsed.email;
-        }
 
         if (dtoParsed.phone) {
             body.tel = dtoParsed.phone;

@@ -9,7 +9,7 @@ export namespace CreateOrderCommand {
         amount: z.number(),
         paymentId: z.string(),
         currency: CtrConfigCommand.RequestCtrConfigSchema.shape.currency.optional(),
-        email: z.string().optional(),
+        email: z.string(),
         phone: z.string().optional(),
         successUrl: z.string().optional(),
         failUrl: z.string().optional(),
