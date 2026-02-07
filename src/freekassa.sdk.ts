@@ -13,7 +13,7 @@ import {
     GetWithdrawalsCurrenciesCommand,
     GetShopsCommand,
 } from './commands';
-import { API } from './api/api';
+import { API } from './api';
 import { ApiRequestBody } from './interfaces';
 
 export class Freekassa {
@@ -146,16 +146,18 @@ export class Freekassa {
         dto: CreateOrderCommand.ICreateOrder,
     ): Promise<CreateOrderCommand.ICreateOrderResponse> {
         const dtoParsed = CreateOrderCommand.RequestCreateOrderSchema.parse(dto);
-
         const body: ApiRequestBody = {
             shopId: this.shopId,
             i: dtoParsed.methodId,
-            email: dtoParsed.email,
             ip: dtoParsed.ip,
             amount: dtoParsed.amount,
-            currency: this.currency,
+            currency: dto.currency ? dto.currency : this.currency,
             paymentId: dtoParsed.paymentId,
         };
+
+        if (dto.email) {
+            body.email = dtoParsed.email;
+        }
 
         if (dtoParsed.phone) {
             body.tel = dtoParsed.phone;

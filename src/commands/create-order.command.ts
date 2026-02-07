@@ -1,12 +1,14 @@
 import { z } from 'zod';
+import { CtrConfigCommand } from './ctr-config.command';
 
 export namespace CreateOrderCommand {
     export const RequestCreateOrderSchema = z.object({
         methodId: z.number(),
-        email: z.string(),
         ip: z.string(),
         amount: z.number(),
         paymentId: z.string(),
+        currency: CtrConfigCommand.RequestCtrConfigSchema.shape.currency.optional(),
+        email: z.string().optional(),
         phone: z.string().optional(),
         successUrl: z.string().optional(),
         failUrl: z.string().optional(),
