@@ -11,12 +11,12 @@ export namespace CreateOrderCommand {
 
     export const RequestCreateOrderSchema = z.object({
         methodId: z.number().int(),
-        // FreeKassa support confirmed that ip and email can be omitted, although the specification marks them required
+        // FreeKassa support confirmed that ip can be omitted, although the specification marks it required
         ip: z.string().optional(),
         amount: z.number().positive(),
         paymentId: z.string().min(1).optional(),
         currency: CtrConfigCommand.RequestCtrConfigSchema.shape.currency.optional(),
-        email: z.string().optional(),
+        email: z.string(),
         phone: z.string().optional(),
         successUrl: z.string().optional(),
         failUrl: z.string().optional(),

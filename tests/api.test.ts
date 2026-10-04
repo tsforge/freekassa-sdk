@@ -109,19 +109,6 @@ describe('API: transport', () => {
 });
 
 describe('API: methods', () => {
-    it('order creation works without ip and email and sends neither', async () => {
-        respondWith(200, {
-            type: 'success',
-            orderId: 1,
-            orderHash: 'h',
-            location: 'https://pay/1',
-        });
-        await sdk.api.orders.create({ methodId: 4, amount: 100 });
-        assert.ok(!('ip' in last().body));
-        assert.ok(!('email' in last().body));
-        assert.equal(last().body.i, 4);
-    });
-
     it('order creation sends the documented fields and a recurring payment', async () => {
         respondWith(200, {
             type: 'success',
