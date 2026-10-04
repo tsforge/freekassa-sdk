@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { CURRENCY_VALUES } from './constants';
+import { STATUS_VALUES } from './constants';
 
 export namespace GetCurrenciesCommand {
     export const ResponseGetCurrenciesSchema = z.object({
-        type: z.enum(['success', 'error']),
+        type: z.enum(STATUS_VALUES),
         currencies: z.array(
             z.object({
                 id: z.number(),
                 name: z.string(),
-                currency: z.enum(CURRENCY_VALUES),
+                currency: z.string(),
                 is_enabled: z.number(),
                 is_favorite: z.number(),
             }),

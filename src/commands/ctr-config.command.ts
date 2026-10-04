@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { CURRENCY_VALUES, LANG_VALUES } from './constants';
+import { CURRENCY_VALUES, DEFAULT_API_URL, DEFAULT_PAY_URL, LANG_VALUES } from './constants';
 
 export namespace CtrConfigCommand {
     export const RequestCtrConfigSchema = z.object({
-        key: z.string(),
-        secretWord1: z.string(),
-        secretWord2: z.string(),
-        shopId: z.number(),
-        payUrl: z.string().default('https://pay.fk.money/'),
-        apiUrl: z.string().default('https://api.fk.life/v1/'),
+        key: z.string().min(1),
+        secretWord1: z.string().min(1),
+        secretWord2: z.string().min(1),
+        shopId: z.number().int().positive(),
+        payUrl: z.url().default(DEFAULT_PAY_URL),
+        apiUrl: z.url().default(DEFAULT_API_URL),
         lang: z.enum(LANG_VALUES),
         currency: z.enum(CURRENCY_VALUES),
     });

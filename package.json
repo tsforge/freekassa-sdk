@@ -1,31 +1,46 @@
 {
   "name": "@exact-team/freekassa-sdk",
-  "version": "0.0.24",
-  "description": "freekassa sdk",
+  "version": "0.1.0",
+  "description": "FreeKassa SDK for Node.js: payment form (SCI), notifications and REST API",
   "scripts": {
-    "test": "ts-node test.ts",
+    "test": "node --test --require ts-node/register tests/*.test.ts",
     "clean": "rm -rf build",
     "build:backend": "tsc -p tsconfig.backend.json",
     "build:frontend": "tsc -p tsconfig.frontend.json",
     "build": "npm run clean && npm run build:backend && npm run build:frontend",
-    "prepublish": "npm run build",
-    "typecheck:watch": "tsc --noEmit -w -p tsconfig.json"
+    "prepack": "npm run build",
+    "typecheck:watch": "tsc --noEmit -w -p tsconfig.json",
+    "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" index.ts",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" index.ts",
+    "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\" index.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:coverage": "mkdir -p coverage && node --enable-source-maps --require ts-node/register --test --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info tests/*.test.ts",
+    "prepare": "husky"
   },
-  "keywords": [],
+  "keywords": [
+    "freekassa",
+    "payments",
+    "payment-gateway",
+    "payouts",
+    "refund",
+    "recurring",
+    "typescript"
+  ],
   "author": "exact01",
   "license": "ISC",
   "dependencies": {
-    "zod": "3.24.3"
+    "zod": "4.6.5"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint": "^8.56.0",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
     "@types/node": "22.15.2",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "husky": "^9.1.7",
+    "prettier": "^3.9.9",
+    "ts-node": "10.9.2",
     "typescript": "5.5.4",
-    "ts-node": "10.9.2"
+    "typescript-eslint": "^8.71.0"
   },
   "main": "build/backend/index.js",
   "browser": "build/frontend/index.js",

@@ -1,6 +1,6 @@
 export * from './create-order.command';
 export * from './create-payment-link.command';
-export * from './create-withdrawal.command copy';
+export * from './create-withdrawal.command';
 export * from './ctr-config.command';
 export * from './get-balance.command';
 export * from './get-currencies-status.command';
@@ -10,4 +10,5 @@ export * from './get-withdrawals-currencies.command';
 export * from './list-orders.command';
 export * from './list-withdrawals.command';
 export * from './notification.command';
+export * from './refund-order.command';
 export * from './constants';

@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { STATUS_VALUES } from './constants';
+import { ORDER_STATUS, STATUS_VALUES } from './constants';
 
 export namespace ListOrdersCommand {
     export const RequestListOrdersSchema = z.object({
         paymentId: z.string().optional(),
-        orderId: z.number().optional(),
-        status: z.union([z.literal(0), z.literal(1), z.literal(8), z.literal(9)]).optional(),
+        orderId: z.number().int().optional(),
+        status: z.nativeEnum(ORDER_STATUS).optional(),
         dateFrom: z.string().optional(),
         dateTo: z.string().optional(),
-        page: z.number().optional(),
+        page: z.number().int().min(0).optional(),
     });
 
     export type IListOrders = z.infer<typeof RequestListOrdersSchema>;

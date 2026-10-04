@@ -1,12 +1,14 @@
 import { z } from 'zod';
 import { STATUS_VALUES } from './constants';
+import { CtrConfigCommand } from './ctr-config.command';
 
 export namespace CreateWithdrawalCommand {
     export const RequestCreateWithdrawalSchema = z.object({
-        methodId: z.number(),
+        methodId: z.number().int(),
         account: z.string(),
-        amount: z.number(),
-        paymentId: z.string(),
+        amount: z.number().positive(),
+        paymentId: z.string().min(1).optional(),
+        currency: CtrConfigCommand.RequestCtrConfigSchema.shape.currency.optional(),
     });
 
     export type ICreateWithdrawal = z.infer<typeof RequestCreateWithdrawalSchema>;

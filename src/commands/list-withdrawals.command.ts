@@ -3,12 +3,12 @@ import { STATUS_VALUES } from './constants';
 
 export namespace ListWithdrawalsCommand {
     export const RequestListWithdrawalsSchema = z.object({
-        orderId: z.number().optional(),
+        orderId: z.number().int().optional(),
         paymentId: z.string().optional(),
-        status: z.number().optional(),
+        status: z.number().int().optional(),
         dateFrom: z.string().optional(),
         dateTo: z.string().optional(),
-        page: z.number().optional(),
+        page: z.number().int().min(0).optional(),
     });
 
     export type IListWithdrawals = z.infer<typeof RequestListWithdrawalsSchema>;

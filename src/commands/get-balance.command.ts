@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { CURRENCY_VALUES, STATUS_VALUES } from './constants';
+import { STATUS_VALUES } from './constants';
 
 export namespace GetBalanceCommand {
     export const ResponseGetBalanceSchema = z.object({
         type: z.enum(STATUS_VALUES),
         balance: z.array(
             z.object({
-                currency: z.enum(CURRENCY_VALUES),
+                currency: z.string(),
                 value: z.number(),
             }),
         ),

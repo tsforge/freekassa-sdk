@@ -1,79 +1,126 @@
 name: Deploy lib
+
 on:
   push:
     tags:
-      - '*'
+      - '[0-9]*.*.*'
+
 jobs:
-  send-start-deploy-telegram-message:
-    name: Send Telegram message
+  notify-start:
+    name: Notify deploy started
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-
       - name: Send Telegram message
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            🏹 Deploy contract ${{ github.REPOSITORY }} npm package has started
-            commit message: ${{ github.event.head_commit.message }}
-            author: ${{ github.event.head_commit.author.name }}
-            commit timestamp: ${{ github.event.head_commit.timestamp }}
+        run: |
+          TEXT=$(cat <<'EOF'
+          🚀 *FreeKassa SDK — publishing started*
+
+          📦 Package: `@exact-team/freekassa-sdk`
+          _Node.js SDK for the FreeKassa payment system_
+
+          🏷 Version: `${{ github.ref_name }}`
+          👤 Author: ${{ github.actor }}
+          🔀 Commit: `${{ github.sha }}`
+
+          [Repository](https://github.com/${{ github.repository }}) • [Build log](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          EOF
+          )
+          curl -sS "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
+            -d parse_mode="Markdown" \
+            -d disable_web_page_preview=true \
+            --data-urlencode "text=${TEXT}"
 
   build:
+    name: Lint, build and publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Check tag matches package version
+        run: |
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_REF_NAME}" != "${PKG_VERSION}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${PKG_VERSION}"
+            exit 1
+          fi
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '22.x'
+          cache: 'npm'
 
-      - name: Install dependencies and build
-        run: npm i && npm run prepublish
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@latest
 
       - name: Publish package on NPM
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
 
-  send-telegram-message:
-    name: Send Telegram message
+  notify-success:
+    name: Notify published
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-
       - name: Send Telegram message
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            ✅ ${{ github.REPOSITORY }} contract npm package published
-            image tag: *${{ github.sha }}*
-            commit message: ${{ github.event.head_commit.message }}
-            author: ${{ github.event.head_commit.author.name }}
-            commit timestamp: ${{ github.event.head_commit.timestamp }}
+        run: |
+          TEXT=$(cat <<'EOF'
+          ✅ *FreeKassa SDK ${{ github.ref_name }} published to npm*
 
-  notify-on-error:
-    runs-on: ubuntu-latest
+          📦 `npm install @exact-team/freekassa-sdk@${{ github.ref_name }}`
+
+          👤 Release author: ${{ github.actor }}
+          🔀 Commit: `${{ github.sha }}`
+
+          [Package on npm](https://www.npmjs.com/package/@exact-team/freekassa-sdk) • [Repository](https://github.com/${{ github.repository }})
+          EOF
+          )
+          curl -sS "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
+            -d parse_mode="Markdown" \
+            -d disable_web_page_preview=true \
+            --data-urlencode "text=${TEXT}"
+
+  notify-error:
+    name: Notify failure
     needs: [build]
     if: failure()
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-
       - name: Send error notification
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            ❌ ${{ github.REPOSITORY }} One of the jobs has fail
+        run: |
+          TEXT=$(cat <<'EOF'
+          ❌ *FreeKassa SDK ${{ github.ref_name }} — publishing failed*
+
+          One of the steps (lint / tests / build / publish) failed.
+
+          👤 Author: ${{ github.actor }}
+          🔀 Commit: `${{ github.sha }}`
+
+          [View logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          EOF
+          )
+          curl -sS "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
+            -d parse_mode="Markdown" \
+            -d disable_web_page_preview=true \
+            --data-urlencode "text=${TEXT}"
