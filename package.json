@@ -2,6 +2,14 @@
   "name": "@exact-team/freekassa-sdk",
   "version": "0.1.0",
   "description": "FreeKassa SDK for Node.js: payment form (SCI), notifications and REST API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsforge/freekassa-sdk.git"
+  },
+  "homepage": "https://github.com/tsforge/freekassa-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/tsforge/freekassa-sdk/issues"
+  },
   "scripts": {
     "test": "node --test --require ts-node/register tests/*.test.ts",
     "clean": "rm -rf build",
