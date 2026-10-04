@@ -339,8 +339,8 @@ import { CURRENCY, PAYMENT_METHOD } from '@exact-team/freekassa-sdk';
 
 const order = await sdk.api.orders.create({
   methodId: PAYMENT_METHOD.VISA_RUB, // required, sent as i
-  ip: '203.0.113.10', // required, customer IP
-  email: 'customer@example.com', // required
+  ip: '203.0.113.10', // optional, customer IP
+  email: 'customer@example.com', // optional
   amount: 1000, // required, greater than zero
   paymentId: 'order-1004', // recommended: used to match the notification
   currency: CURRENCY.RUB, // optional, defaults to the config value

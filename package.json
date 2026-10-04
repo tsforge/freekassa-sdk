@@ -1,6 +1,6 @@
 {
   "name": "@exact-team/freekassa-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "FreeKassa SDK for Node.js: payment form (SCI), notifications and REST API",
   "repository": {
     "type": "git",
