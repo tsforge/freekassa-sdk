@@ -1,10 +1,8 @@
 **English** | [Русский](./README.ru.md)
 
 <p align="center">
-  <img src="https://i.postimg.cc/NMM7H75M/kassa.png" alt="freekassa-sdk" width="100%">
+  <img src="https://i.postimg.cc/t48NxVF2/kassa.webp" alt="FreeKassa SDK for TypeScript" width="100%">
 </p>
-
-# freekassa-sdk
 
 ## Install
 
